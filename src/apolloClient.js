@@ -1,5 +1,3 @@
-// src/apolloClient.js
-
 import { ApolloClient, InMemoryCache } from "@apollo/client"
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions"
 import { createClient } from "graphql-ws"
