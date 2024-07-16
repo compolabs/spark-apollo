@@ -1,15 +1,15 @@
-// src/Orders.js
+import React from "react"
+import { useSubscription, gql } from "@apollo/client"
 
-import React, { useEffect } from "react"
-import { useQuery, gql, useSubscription } from "@apollo/client"
-
-const GET_ORDERS = gql`
-  query GetOrders {
-    Order {
+const ORDERS_SUBSCRIPTION_BUY = gql`
+  subscription {
+    Order(
+      where: { status: { _eq: "Active" }, order_type: { _eq: "Buy" } }
+      order_by: { price: desc }
+    ) {
       id
       asset
       amount
-      asset_type
       order_type
       price
       status
@@ -19,13 +19,15 @@ const GET_ORDERS = gql`
   }
 `
 
-const ORDER_UPDATED = gql`
-  subscription OnOrderUpdated {
-    orderUpdated {
+const ORDERS_SUBSCRIPTION_SELL = gql`
+  subscription {
+    Order(
+      where: { status: { _eq: "Active" }, order_type: { _eq: "Sell" } }
+      order_by: { price: asc }
+    ) {
       id
       asset
       amount
-      asset_type
       order_type
       price
       status
@@ -36,34 +38,57 @@ const ORDER_UPDATED = gql`
 `
 
 const Orders = () => {
-  const { loading, error, data, refetch } = useQuery(GET_ORDERS)
-  const { data: subscriptionData } = useSubscription(ORDER_UPDATED)
+  const {
+    data: buyData,
+    loading: buyLoading,
+    error: buyError,
+  } = useSubscription(ORDERS_SUBSCRIPTION_BUY)
+  const {
+    data: sellData,
+    loading: sellLoading,
+    error: sellError,
+  } = useSubscription(ORDERS_SUBSCRIPTION_SELL)
 
-  useEffect(() => {
-    if (subscriptionData) {
-      refetch()
-    }
-  }, [subscriptionData, refetch])
+  if (buyLoading || sellLoading) return <p>Loading...</p>
+  if (buyError) return <p>Error: {buyError.message}</p>
+  if (sellError) return <p>Error: {sellError.message}</p>
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
+  const buyOrders = buyData.Order
+  const sellOrders = sellData.Order
 
   return (
     <div>
-      <h2>Orders</h2>
-      <ul>
-        {data.Order.map((order) => (
-          <li key={order.id}>
-            <p>Asset: {order.asset}</p>
-            <p>Amount: {order.amount}</p>
-            <p>Type: {order.order_type}</p>
-            <p>Price: {order.price}</p>
-            <p>Status: {order.status}</p>
-            <p>User: {order.user}</p>
-            <p>Timestamp: {order.timestamp}</p>
-          </li>
-        ))}
-      </ul>
+      <h2>GraphQL Orders</h2>
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div>
+          <h3>Buy Orders</h3>
+          <ul>
+            {buyOrders.map((order) => (
+              <li key={order.id}>
+                <p>Order ID: {order.id}</p>
+                <p>Amount: {order.amount}</p>
+                <p>Price: {order.price}</p>
+                <p>Status: {order.status}</p>
+                <p>Timestamp: {order.timestamp}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3>Sell Orders</h3>
+          <ul>
+            {sellOrders.map((order) => (
+              <li key={order.id}>
+                <p>Order ID: {order.id}</p>
+                <p>Amount: {order.amount}</p>
+                <p>Price: {order.price}</p>
+                <p>Status: {order.status}</p>
+                <p>Timestamp: {order.timestamp}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }
