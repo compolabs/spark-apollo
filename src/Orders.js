@@ -3,14 +3,14 @@ import { useSubscription, gql } from "@apollo/client"
 
 const ORDERS_SUBSCRIPTION_BUY = gql`
   subscription {
-    Order(
-      where: { status: { _eq: "Active" }, order_type: { _eq: "Buy" } }
-      order_by: { price: desc }
+    orders(
+      where: { status_eq: Active, orderType_eq: Buy }
+      orderBy: price_DESC
     ) {
       id
       asset
       amount
-      order_type
+      orderType
       price
       status
       user
@@ -21,14 +21,14 @@ const ORDERS_SUBSCRIPTION_BUY = gql`
 
 const ORDERS_SUBSCRIPTION_SELL = gql`
   subscription {
-    Order(
-      where: { status: { _eq: "Active" }, order_type: { _eq: "Sell" } }
-      order_by: { price: asc }
+    orders(
+      where: { status_eq: Active, orderType_eq: Sell }
+      orderBy: price_ASC
     ) {
       id
       asset
       amount
-      order_type
+      orderType
       price
       status
       user
@@ -39,11 +39,11 @@ const ORDERS_SUBSCRIPTION_SELL = gql`
 
 const ORDERS_SUBSCRIPTION_CLOSED = gql`
   subscription {
-    Order(where: { status: { _eq: "Closed" } }, order_by: { timestamp: desc }) {
+    orders(where: { status_eq: Closed }, orderBy: timestamp_DESC) {
       id
       asset
       amount
-      order_type
+      orderType
       price
       status
       user
@@ -74,9 +74,9 @@ const Orders = () => {
   if (sellError) return <p>Error: {sellError.message}</p>
   if (closedError) return <p>Error: {closedError.message}</p>
 
-  const buyOrders = buyData.Order
-  const sellOrders = sellData.Order
-  const closedOrders = closedData.Order
+  const buyOrders = buyData.orders
+  const sellOrders = sellData.orders
+  const closedOrders = closedData.orders
 
   return (
     <div>
