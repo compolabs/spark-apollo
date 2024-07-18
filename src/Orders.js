@@ -3,7 +3,7 @@ import { useSubscription, gql } from "@apollo/client"
 
 const ORDERS_SUBSCRIPTION_BUY = gql`
   subscription {
-    Order(
+    order(
       where: { status: { _eq: "Active" }, order_type: { _eq: "Buy" } }
       order_by: { price: desc }
     ) {
@@ -21,7 +21,7 @@ const ORDERS_SUBSCRIPTION_BUY = gql`
 
 const ORDERS_SUBSCRIPTION_SELL = gql`
   subscription {
-    Order(
+    order(
       where: { status: { _eq: "Active" }, order_type: { _eq: "Sell" } }
       order_by: { price: asc }
     ) {
@@ -39,7 +39,7 @@ const ORDERS_SUBSCRIPTION_SELL = gql`
 
 const ORDERS_SUBSCRIPTION_CLOSED = gql`
   subscription {
-    Order(where: { status: { _eq: "Closed" } }, order_by: { timestamp: desc }) {
+    order(where: { status: { _eq: "Closed" } }, order_by: { timestamp: desc }) {
       id
       asset
       amount
@@ -74,9 +74,9 @@ const Orders = () => {
   if (sellError) return <p>Error: {sellError.message}</p>
   if (closedError) return <p>Error: {closedError.message}</p>
 
-  const buyOrders = buyData.Order
-  const sellOrders = sellData.Order
-  const closedOrders = closedData.Order
+  const buyOrders = buyData.order
+  const sellOrders = sellData.order
+  const closedOrders = closedData.order
 
   return (
     <div>
