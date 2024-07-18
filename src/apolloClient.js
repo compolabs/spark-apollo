@@ -5,6 +5,11 @@ import { createClient } from "graphql-ws"
 const wsLink = new GraphQLWsLink(
   createClient({
     url: "ws://localhost:8080/v1/graphql",
+    connectionParams: {
+      headers: {
+        'x-hasura-admin-secret': 'admin'
+      }
+    }
   })
 )
 
