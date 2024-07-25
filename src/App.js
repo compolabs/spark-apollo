@@ -6,9 +6,9 @@ import ActiveOrders from "./ActiveOrders"
 function App() {
   return (
     <ApolloProvider client={client}>
-      <React.StrictMode>
+      {/* <React.StrictMode> */}
         <ActiveOrders />
-      </React.StrictMode>
+      {/* </React.StrictMode> */}
     </ApolloProvider>
   )
 }

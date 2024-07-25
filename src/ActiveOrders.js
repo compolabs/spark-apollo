@@ -3,7 +3,7 @@ import { useSubscription, gql } from "@apollo/client"
 
 const ACTIVE_ORDERS_SUBSCRIPTION = gql`
   subscription {
-    activeOrders {
+    ActiveOrders {
       id
       orders {
         id
@@ -13,6 +13,7 @@ const ACTIVE_ORDERS_SUBSCRIPTION = gql`
         amount
         asset
         price
+        activeOrderRef_id
       }
     }
   }
@@ -28,7 +29,7 @@ function ActiveOrders() {
 
   return (
     <div>
-      {data.activeOrders.orders.map((order) => (
+      {/* {data.activeOrders.orders.map((order) => (
         <div key={order.id}>
           <p>User: {order.user}</p>
           <p>Timestamp: {new Date(order.timestamp).toLocaleString()}</p>
@@ -37,7 +38,7 @@ function ActiveOrders() {
           <p>Asset: {order.asset}</p>
           <p>Price: {order.price}</p>
         </div>
-      ))}
+      ))} */}
     </div>
   )
 }
