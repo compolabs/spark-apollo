@@ -1,14 +1,14 @@
 import React from "react"
 import { ApolloProvider } from "@apollo/client"
 import client from "./apolloClient"
-import Orders from "./Orders"
+import ActiveOrders from "./ActiveOrders"
 
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="App">
-        <Orders />
-      </div>
+      {/* <React.StrictMode> */}
+        <ActiveOrders />
+      {/* </React.StrictMode> */}
     </ApolloProvider>
   )
 }
