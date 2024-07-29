@@ -10,16 +10,16 @@ import {
 
 import { getMainDefinition } from "@apollo/client/utilities";
 
-const BASE_URL = 'indexer.bigdevenergy.link/67b693c/v1/graphql';
+const BASE_URL = 'localhost:8080/v1/graphql';
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `wss://${BASE_URL}`,
+    url: `ws://${BASE_URL}`,
   })
 )
 
 const httpLink = new HttpLink({
-  uri: `https://${BASE_URL}`,
+  uri: `http://${BASE_URL}`,
 });
 
 
